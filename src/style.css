@@ -13,9 +13,6 @@
     gap: 20px
 }
 
-.tableroJugador {
-
-}
 
 .casillaJugador{
     width: 20px;
@@ -33,18 +30,32 @@
     display: none;
 }
 
-.barco{
+.Barco{
     background-color: red;
 }
-.buque{
+.Buque{
     background-color: blue;
 }
-.submarino{
+.Submarino{
     background-color: orange;
 }
-.portaAviones{
+.PortaAviones{
     background-color: brown;
 }
+
+.formulario{
+    display: flex;
+    flex-flow: column nowrap;
+    gap:10px;
+    width: min-content;
+}
+
+.contenedorInput{
+    display: flex;
+    gap: 20px;
+}
+
+
 
 
 
