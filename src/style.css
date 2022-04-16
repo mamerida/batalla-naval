@@ -1,0 +1,26 @@
+.contenedor{
+    display: flex;
+    flex-flow: column nowrap;
+    width: 30%;
+    margin: 0 10px;
+    align-items: start;
+    gap: 10px;
+}
+
+.TableroJuego{
+    display: flex;
+    flex-flow: row nowrap;
+    gap:20px
+}
+.tableroJugador{
+    width: 400px;
+    height: 400px;
+    background-color:bisque;
+
+}
+
+.tableroPc{
+    width: 400px;
+    height: 400px;
+    background-color:aquamarine
+}

@@ -1,23 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+
+import style from './style.css';
+import { useState } from 'react';
 
 function App() {
+
+  const [partida, setPartida] = useState(false);
+
+  const comenzarPartida = () => {
+    setPartida(true);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h3>Batalla Naval</h3>
+      <div className='contenedor'>
+        <button className='botonStart' onClick={comenzarPartida}>Comenzar Juego</button>
+        <div className='TableroJuego'>
+          <div className='tableroJugador'></div>
+          <div className='tableroPc'></div>
+        </div>
+      </div>
     </div>
   );
 }
