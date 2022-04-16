@@ -1,4 +1,4 @@
-.contenedor{
+.contenedor {
     display: flex;
     flex-flow: column nowrap;
     width: 30%;
@@ -7,20 +7,26 @@
     gap: 10px;
 }
 
-.TableroJuego{
+.ContenedorTablero {
     display: flex;
     flex-flow: row nowrap;
-    gap:20px
+    gap: 20px
 }
-.tableroJugador{
+
+.tableroJugador {
     width: 400px;
     height: 400px;
-    background-color:bisque;
+    background-color: bisque;
 
 }
 
-.tableroPc{
+.tableroPc {
     width: 400px;
     height: 400px;
-    background-color:aquamarine
+    background-color: aquamarine
 }
+
+.none{
+    display: none;
+}
+
