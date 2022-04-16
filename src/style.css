@@ -18,9 +18,9 @@
 }
 
 .casillaJugador{
-    width: 10px;
-    height: 10px;
-    background-color: antiquewhite;
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
 }
 
 .tableroPc {
@@ -32,4 +32,19 @@
 .none{
     display: none;
 }
+
+.barco{
+    background-color: red;
+}
+.buque{
+    background-color: blue;
+}
+.submarino{
+    background-color: orange;
+}
+.portaAviones{
+    background-color: brown;
+}
+
+
 
