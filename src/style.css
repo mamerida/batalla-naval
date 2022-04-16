@@ -54,6 +54,10 @@
     display: flex;
     gap: 20px;
 }
+.mensajeError{
+    color:red;
+    font-size: 11px;
+}
 
 
 

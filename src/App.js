@@ -9,17 +9,51 @@ function App() {
   const [tableroPc, setTableroPC] = useState([]);
 
 
+
   const ColocarPieza = ({ pieza }) => {
 
-    const [selectedOption, setSelectedOption] = useState("");
+    const [selectedOption, setSelectedOption] = useState("v");
     const [fila, setFila] = useState("");
     const [columna, setColumna] = useState("");
     const [errorFila, setErrorFila] = useState("")
     const [errorcColumna, setErrorColunma] = useState("")
+    const [errorPieza, setErrorPieza] = useState("")
+
+    const setSelect = (e)=>{
+      setSelectedOption(e);
+    }
+
+    //en esta funcion se revisa que la pieza pueda caber en el tablero 
 
     const colocarPiezaEnElTablero = (evento) => {
       evento.preventDefault();
-      console.log(evento)
+      let filaPieza = fila - 1;
+      let columnaPieza = columna - 1;
+
+      const comprobarSiEntraTablero = (largoPieza,sentido) =>{
+        if (sentido === "v"){
+          if(largoPieza >  (tableroJugador.length - fila)){
+            setErrorPieza("la pieza se sale del tablero")
+            return errorPieza
+          }
+        } else{
+          if(largoPieza >  (tableroJugador.length - columna)){
+            setErrorPieza("la pieza se sale del tablero")
+            return errorPieza
+          }
+        }
+        
+      } 
+
+
+      if (selectedOption === "v") { //vertical
+        let resultado = comprobarSiEntraTablero(pieza.largo.length,selectedOption)
+
+      } else if (selectedOption === "h") { //horizontal
+        let resultado = comprobarSiEntraTablero(pieza.largo.length,selectedOption)
+      }
+
+
     }
 
     const comprobarCampo = (valor) => {
@@ -37,11 +71,11 @@ function App() {
 
     const revisarFila = (evento) => {
       let resultado = comprobarCampo(evento.target.value)
-      if (typeof resultado === "string"){
+      if (typeof resultado === "string") {
         setErrorFila(resultado)
         setFila(evento.target.value)
       }
-      else{
+      else {
         setFila(evento.target.value)
         setErrorFila("")
       }
@@ -49,11 +83,11 @@ function App() {
 
     const revisarColumna = (evento) => {
       let resultado = comprobarCampo(evento.target.value)
-      if (typeof resultado === "string"){
+      if (typeof resultado === "string") {
         setColumna(evento.target.value)
-        setErrorColunma(resultado)       
+        setErrorColunma(resultado)
       }
-      else{
+      else {
         setColumna(evento.target.value)
         setErrorColunma("")
       }
@@ -65,31 +99,33 @@ function App() {
         <h4>{pieza.nombre}</h4>
         <div className='contenedorInput'>
           <label>Fila</label>
-          <input type="text" value={fila} onChange={revisarFila} /> 
+          <input type="text" value={fila} onChange={revisarFila} />
         </div>
-        {errorFila ? <div>{errorFila}</div> : null}
+        {errorFila ? <div className='mensajeError' >{errorFila}</div> : null}
         <div className='contenedorInput'>
           <label>Columna</label>
-          <input type="text" value={columna} onChange={revisarColumna} /> 
+          <input type="text" value={columna} onChange={revisarColumna} />
         </div>
-        {errorcColumna ? <div>{errorcColumna}</div> : null}
+        {errorcColumna ? <div className='mensajeError' >{errorcColumna}</div> : null}
         <select
           value={selectedOption}
-          onChange={e => setSelectedOption(e.target.value)}
+          onChange={e => setSelect(e.target.value)}
         >
-          <option key="v" value="h">Vertical</option>
-          <option key="h" value="v" >Horizontal</option>
+          <option key="v" value="v">Vertical</option>
+          <option key="h" value="h" >Horizontal</option>
         </select>
         <div className='contenedorPiezas'>
           {pieza.largo.map((casilla) => {
             return <div key={casilla} className={` casillaJugador ${pieza.nombre}`}></div>
           })}
         </div>
-        <input type="submit" value="Colocar Pieza" disabled={(errorFila || errorcColumna) ? true : false}/>
+        <input  type="button" onClick={colocarPiezaEnElTablero} value="Colocar Pieza" disabled={(errorFila || errorcColumna || !fila || !columna) ? true : false} />
+        {errorPieza ? <div className='mensajeError'>{errorPieza}</div> : null}
       </form>
     )
   }
 
+  //se crean las piezas las cuales voy a jugar 
 
   const piezas = [
     {
@@ -110,6 +146,11 @@ function App() {
     }
   ]
 
+  //con esta funcion voy a revisar al momento de crear la partida que piezas estan en el tablero y cuales no 
+  const [piezasFueraTablero, setPiezasFueraTablero] = useState(piezas)
+
+  //esta funcion creal el juego a nivel local. settea de manera predefinida el tamaño del campo de juego 
+
   const comenzarPartida = () => {
     setPartida(true);
     setTableroJugador([["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]])
@@ -126,7 +167,7 @@ function App() {
             {console.log(tableroJugador)}
           </div>
           <label>Coloca tus piezas</label>
-          {piezas.map(pieza => {
+          {piezasFueraTablero.map(pieza => {
             return <ColocarPieza pieza={pieza} key={pieza.nombre} />
           })}
           <div className='inputsContainer'>
