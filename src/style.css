@@ -14,15 +14,18 @@
 }
 
 .tableroJugador {
-    width: 400px;
-    height: 400px;
-    background-color: bisque;
 
 }
 
+.casillaJugador{
+    width: 10px;
+    height: 10px;
+    background-color: antiquewhite;
+}
+
 .tableroPc {
-    width: 400px;
-    height: 400px;
+    width: 10px;
+    height: 10px;
     background-color: aquamarine
 }
 

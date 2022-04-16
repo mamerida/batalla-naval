@@ -5,7 +5,8 @@ import { useState } from 'react';
 function App() {
 
   const [partida, setPartida] = useState(false);
-
+  const [tableroJugador, setTableroJugador] = useState([]);
+  const [tableroPc, setTableroPC] = useState([]);
   const piezas = [
     {
       nombre:"barco",
@@ -27,6 +28,8 @@ function App() {
 
   const comenzarPartida = () => {
     setPartida(true);
+    setTableroJugador([["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]])
+    setTableroPC([["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]])
   }
 
   return (
@@ -36,11 +39,12 @@ function App() {
         <button className='botonStart' onClick={comenzarPartida}>Comenzar Juego</button>
         <div className={partida ? "TableroJuego" : "none"}>
           <div className='ContenedorTablero'>
-          <div className='tableroJugador'></div>
-          <div className='tableroPc'></div>
+
           </div>
           <label>Coloca tus piezas</label>
-          {piezas.map(pieza => <li key={pieza.nombre}  draggable="true">{pieza.nombre}</li>)}
+          <div className='inputsContainer'>
+
+          </div>
         </div>
       </div>
     </div>
