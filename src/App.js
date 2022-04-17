@@ -30,6 +30,7 @@ function App() {
       if(selectedOption === "v"){       
         pieza.largo.forEach(element => {
           if(tableroJugador[fila+element][columna]){
+            console.log(tableroJugador[fila+element][columna])
             setErrorPieza("Ya hay una pieza ocupando ese lugar")
           }else{
             setErrorPieza("")
@@ -39,10 +40,12 @@ function App() {
               seleccionada: false
             }
             tableroJugador[fila+element][columna] = PiezaTablero;
-            console.log(tableroJugador)
+            
           }
         });
-        
+        if(!errorPieza){
+          setPiezasFueraTablero(piezasFueraTablero.filter(piezaTablero => piezaTablero.nombre !== pieza.nombre ))
+        }  
       }else{
         pieza.largo.forEach(element => {
           if(tableroJugador[fila][columna+element]){
