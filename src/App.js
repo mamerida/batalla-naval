@@ -23,6 +23,45 @@ function App() {
       setSelectedOption(e);
     }
 
+    //se verifica que la pieza no este pisando otras piezas en el tablero
+    
+    const revisarTableroJuego = (pieza,fila,columna) =>{
+
+      if(selectedOption === "v"){       
+        pieza.largo.forEach(element => {
+          if(tableroJugador[fila+element][columna]){
+            setErrorPieza("Ya hay una pieza ocupando ese lugar")
+          }else{
+            setErrorPieza("")
+            let PiezaTablero = {
+              nombrePieza: pieza.nombre,
+              partepieza : element,
+              seleccionada: false
+            }
+            tableroJugador[fila+element][columna] = PiezaTablero;
+            console.log(tableroJugador)
+          }
+        });
+        
+      }else{
+        pieza.largo.forEach(element => {
+          if(tableroJugador[fila][columna+element]){
+            setErrorPieza("Ya hay una pieza ocupando ese lugar")
+          }else{
+            setErrorPieza("")
+            let PiezaTablero = {
+              nombrePieza: pieza.nombre,
+              partepieza : element,
+              seleccionada: false
+            }
+            tableroJugador[fila][columna+element] = PiezaTablero;
+            console.log(tableroJugador)
+          }
+        }); 
+      }
+
+    }
+
     //en esta funcion se revisa que la pieza pueda caber en el tablero 
 
     const colocarPiezaEnElTablero = (evento) => {
@@ -30,28 +69,15 @@ function App() {
       let filaPieza = fila - 1;
       let columnaPieza = columna - 1;
 
-      const comprobarSiEntraTablero = (largoPieza,sentido) =>{
-        if (sentido === "v"){
-          if(largoPieza >  (tableroJugador.length - fila)){
-            setErrorPieza("la pieza se sale del tablero")
-            return errorPieza
-          }
-        } else{
-          if(largoPieza >  (tableroJugador.length - columna)){
-            setErrorPieza("la pieza se sale del tablero")
-            return errorPieza
-          }
-        }
-        
-      } 
-
-
-      if (selectedOption === "v") { //vertical
-        let resultado = comprobarSiEntraTablero(pieza.largo.length,selectedOption)
-
-      } else if (selectedOption === "h") { //horizontal
-        let resultado = comprobarSiEntraTablero(pieza.largo.length,selectedOption)
+      if(selectedOption === "v" && tableroJugador.length<(pieza.largo.length + filaPieza) ){
+        setErrorPieza("la pieza se sale del tablero");
+      }else if (selectedOption === "h" && tableroJugador.length<(pieza.largo.length + columnaPieza)){
+        setErrorPieza("la pieza se sale del tablero");
+      }else{
+        setErrorPieza("");
+        revisarTableroJuego(pieza,filaPieza,columnaPieza)
       }
+
 
 
     }
