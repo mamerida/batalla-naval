@@ -7,11 +7,33 @@ function App() {
   const [partida, setPartida] = useState(false);
   const [tableroJugador, setTableroJugador] = useState([]);
   const [tableroPc, setTableroPC] = useState([]);
+  //se crean las piezas las cuales voy a jugar 
+
+  const piezas = [
+    {
+      nombre: "Barco",
+      largo: [0]
+    },
+    {
+      nombre: "Buque",
+      largo: [0, 1]
+    },
+    {
+      nombre: "Submarino",
+      largo: [0, 1, 2]
+    },
+    {
+      nombre: "PortaAviones",
+      largo: [0, 1, 2, 3]
+    }
+  ]
+
+  //con esta funcion voy a revisar al momento de crear la partida que piezas estan en el tablero y cuales no 
+  const [piezasFueraTablero, setPiezasFueraTablero] = useState(piezas)
 
 
 
   const ColocarPieza = ({ pieza }) => {
-
     const [selectedOption, setSelectedOption] = useState("v");
     const [fila, setFila] = useState("");
     const [columna, setColumna] = useState("");
@@ -19,48 +41,65 @@ function App() {
     const [errorcColumna, setErrorColunma] = useState("")
     const [errorPieza, setErrorPieza] = useState("")
 
-    const setSelect = (e)=>{
+    const setSelect = (e) => {
       setSelectedOption(e);
     }
 
     //se verifica que la pieza no este pisando otras piezas en el tablero
-    
-    const revisarTableroJuego = (pieza,fila,columna) =>{
 
-      if(selectedOption === "v"){       
+    // let PiezaTablero = {
+    //   nombrePieza: pieza.nombre,
+    //   partepieza: element,
+    //   seleccionada: false
+    // }
+    // tableroJugador[fila + element][columna] = PiezaTablero;
+    // console.log(tableroJugador)
+
+    //setPiezasFueraTablero(piezasFueraTablero.filter(piezaTablero => piezaTablero.nombre !== pieza.nombre))
+
+    const revisarTableroJuego = (pieza, fila, columna) => {
+
+      if (selectedOption === "v") {
+        let hayError = false;
         pieza.largo.forEach(element => {
-          if(tableroJugador[fila+element][columna]){
-            console.log(tableroJugador[fila+element][columna])
+          if (tableroJugador[fila + element][columna]) {
             setErrorPieza("Ya hay una pieza ocupando ese lugar")
-          }else{
-            setErrorPieza("")
-            let PiezaTablero = {
-              nombrePieza: pieza.nombre,
-              partepieza : element,
-              seleccionada: false
-            }
-            tableroJugador[fila+element][columna] = PiezaTablero;
-            
-          }
-        });
-        if(!errorPieza){
-          setPiezasFueraTablero(piezasFueraTablero.filter(piezaTablero => piezaTablero.nombre !== pieza.nombre ))
-        }  
-      }else{
-        pieza.largo.forEach(element => {
-          if(tableroJugador[fila][columna+element]){
-            setErrorPieza("Ya hay una pieza ocupando ese lugar")
-          }else{
-            setErrorPieza("")
-            let PiezaTablero = {
-              nombrePieza: pieza.nombre,
-              partepieza : element,
-              seleccionada: false
-            }
-            tableroJugador[fila][columna+element] = PiezaTablero;
-            console.log(tableroJugador)
-          }
+            hayError = true;
+          } 
         }); 
+        if(!hayError){
+          pieza.largo.forEach(element => {
+                let PiezaTablero = {
+                  nombrePieza: pieza.nombre,
+                  partepieza: element,
+                  seleccionada: false
+                }
+                tableroJugador[fila + element][columna] = PiezaTablero;
+                console.log(tableroJugador)
+                setPiezasFueraTablero(piezasFueraTablero.filter(piezaTablero => piezaTablero.nombre !== pieza.nombre))
+          });
+        }
+
+      } else {
+        let hayError = false;
+        pieza.largo.forEach(element => {
+          if (tableroJugador[fila][columna  + element]) {
+            setErrorPieza("Ya hay una pieza ocupando ese lugar")
+            hayError = true;
+          } 
+        }); 
+        if(!hayError){
+          pieza.largo.forEach(element => {
+                let PiezaTablero = {
+                  nombrePieza: pieza.nombre,
+                  partepieza: element,
+                  seleccionada: false
+                }
+                tableroJugador[fila][columna  + element] = PiezaTablero;
+                console.log(tableroJugador)
+                setPiezasFueraTablero(piezasFueraTablero.filter(piezaTablero => piezaTablero.nombre !== pieza.nombre))
+          });
+        }
       }
 
     }
@@ -72,13 +111,13 @@ function App() {
       let filaPieza = fila - 1;
       let columnaPieza = columna - 1;
 
-      if(selectedOption === "v" && tableroJugador.length<(pieza.largo.length + filaPieza) ){
+      if (selectedOption === "v" && tableroJugador.length < (pieza.largo.length + filaPieza)) {
         setErrorPieza("la pieza se sale del tablero");
-      }else if (selectedOption === "h" && tableroJugador.length<(pieza.largo.length + columnaPieza)){
+      } else if (selectedOption === "h" && tableroJugador.length < (pieza.largo.length + columnaPieza)) {
         setErrorPieza("la pieza se sale del tablero");
-      }else{
+      } else {
         setErrorPieza("");
-        revisarTableroJuego(pieza,filaPieza,columnaPieza)
+        revisarTableroJuego(pieza, filaPieza, columnaPieza)
       }
 
 
@@ -148,35 +187,13 @@ function App() {
             return <div key={casilla} className={` casillaJugador ${pieza.nombre}`}></div>
           })}
         </div>
-        <input  type="button" onClick={colocarPiezaEnElTablero} value="Colocar Pieza" disabled={(errorFila || errorcColumna || !fila || !columna) ? true : false} />
+        <input type="button" onClick={colocarPiezaEnElTablero} value="Colocar Pieza" disabled={(errorFila || errorcColumna || !fila || !columna) ? true : false} />
         {errorPieza ? <div className='mensajeError'>{errorPieza}</div> : null}
       </form>
     )
   }
 
-  //se crean las piezas las cuales voy a jugar 
 
-  const piezas = [
-    {
-      nombre: "Barco",
-      largo: [0]
-    },
-    {
-      nombre: "Buque",
-      largo: [0, 1]
-    },
-    {
-      nombre: "Submarino",
-      largo: [0, 1, 2]
-    },
-    {
-      nombre: "PortaAviones",
-      largo: [0, 1, 2, 3]
-    }
-  ]
-
-  //con esta funcion voy a revisar al momento de crear la partida que piezas estan en el tablero y cuales no 
-  const [piezasFueraTablero, setPiezasFueraTablero] = useState(piezas)
 
   //esta funcion creal el juego a nivel local. settea de manera predefinida el tamaño del campo de juego 
 
@@ -190,12 +207,17 @@ function App() {
     <div className="App">
       <h3>Batalla Naval</h3>
       <div className='contenedor'>
-        <button className='botonStart' onClick={comenzarPartida}>Comenzar Juego</button>
+        {piezasFueraTablero.length > 0   
+        ? 
+          <button className='botonStart' onClick={comenzarPartida}>Comenzar Juego</button>
+        :
+          null
+        }
         <div className={partida ? "TableroJuego" : "none"}>
           <div className='ContenedorTablero'>
             {console.log(tableroJugador)}
           </div>
-          <label>Coloca tus piezas</label>
+          <label>{piezasFueraTablero.length > 0 ? "Coloca tus piezas" : "Al ataque" }</label>
           {piezasFueraTablero.map(pieza => {
             return <ColocarPieza pieza={pieza} key={pieza.nombre} />
           })}
